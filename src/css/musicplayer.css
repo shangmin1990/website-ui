@@ -1,0 +1,99 @@
+/* Benjamin
+music-player style-----------------*/
+.music-img{
+  width:120px;
+  height:120px;
+  background: url('../img/musicbg.png') no-repeat;
+  background-position: -280px 0px;
+  -moz-background-clip: padding-box;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ffffff;
+  border-radius: 50%;
+  /*  -webkit-transform:rotate(0deg);
+    -moz-transform:rotate(0deg);
+    -transform:rotate(0deg);
+    */
+  /*-webkit-transition:-webkit-transform 200s linear;*/
+  /*-moz-transition:-moz-transform 200s linear;*/
+  /*transition:-webkit-transform 200s linear,-moz-transform 200s linear;*/
+}
+/*
+.music-img:hover{
+  -webkit-transform:rotate(18000deg);
+  -transform:rotate(18000deg);
+}*/
+
+.ctrl{
+  height: 35px;
+  width: 35px;
+  background-clip: padding-box;
+  background: url("../img/musicbg.png") no-repeat;
+  border-radius: 50%;
+}
+.ctrl-sm{
+  width: 18px;
+  height: 15px;
+  margin-left: 20px;
+  margin-top: 10px;
+}
+.play-ab{
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  background-position: -23px 0px;
+}
+.play-ab:hover{
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  background-position: -23px -40px;
+}
+.play{
+  background-position: -3px -111px;
+}
+.play:hover{
+  background-position: -3px -146px;
+}
+.pause{
+  background-position: -146px -111px;
+}
+.pause:hover{
+  background-position: -146px -146px;
+}
+.next{
+  background-position: -111px -111px;
+}
+.next:hover{
+  background-position: -111px -146px;
+}
+.duration{
+  float:left;
+  height: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width:70%;
+  cursor: pointer;
+}
+.volume{
+  background-position: 0px -182px;
+}
+ul,ol{
+  list-style:none;
+}
+li {
+  display: block;
+  float: left;
+}
+.player-panel{
+  border: 1px solid #b2dba1;
+  width:400px;
+  background-color: #e9eaea;
+}
+.volume-bar{
+  height: 5px;
+  width: 60px;
+  margin-top: 15px;
+  margin-left: 5px;
+  cursor: pointer;
+}
