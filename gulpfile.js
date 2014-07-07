@@ -4,7 +4,8 @@ var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
 
 var path = {
-scripts:['src/*.js','src/**/*.js']
+scripts:['src/*.js','src/**/*.js'],
+css:"src/css/*"
 };
 
 gulp.task('concat', function () {
@@ -18,11 +19,17 @@ gulp.task('jshint', function () {
         .pipe(jshint());
 });
 
+gulp.task('cssmin',function(){
+  return gulp.src(path.css)
+      .pipe(concat('all.min.css'))
+      .pipe(gulp.dest('./bower-website-ui'));
+});
+
 gulp.task('uglify', function () {
     gulp.src(path.scripts)
         .pipe(uglify())
-        .pipe(concat('goodjs-ui.min.js'))
+        .pipe(concat('website-ui.min.js'))
         .pipe(gulp.dest('./bower-website-ui'));
 });
 
-gulp.task('default', ['concat','jshint','uglify']);
+gulp.task('default', ['concat','jshint','uglify','cssmin']);
