@@ -1,10 +1,6 @@
 language: node_js
 node_js:
 - 0.10
-branches:
-  only:
-    - master
-    - gh-pages
 before_script:
 - git config --global user.email "${GIT_EMAIL}"
 - git config --global user.name "${GIT_NAME}"

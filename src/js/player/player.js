@@ -86,10 +86,11 @@ angular.module("website.ui.player",[])
               audio.pause();
               if(imageRotateInterval){
                 clearInterval(imageRotateInterval);
+                imageRotateInterval = null;
               }
             }
           });
-        })
+        });
 
         /**
          * 音乐加载完毕
