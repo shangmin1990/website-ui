@@ -10,7 +10,7 @@ angular.module("website.ui.player",[])
       $scope.autoplay = true;
       $scope.list = (function(){return $scope.list;})();
       if(!angular.isArray($scope.list)||$scope.list.length == 0){
-        var obj = {}
+        var obj = {};
         obj.url = "";
         obj.title = "";
         obj.artist = '';
