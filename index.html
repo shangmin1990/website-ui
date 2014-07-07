@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <title>Music Player</title>
   <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
-  <link type="text/css" rel="stylesheet" href="src/css/musicplayer.css"/>
+  <link type="text/css" rel="stylesheet" href="build/all.min.css"/>
 </head>
 <body ng-controller="MusicDemoCtrl">
 <musicplayer list=list></musicplayer>
 <script type="text/javascript" src="bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="src/js/main.js"></script>
-<script type="text/javascript" src="src/js/player/player.js"></script>
+<!--<script type="text/javascript" src="src/js/main.js"></script>-->
+<!--<script type="text/javascript" src="src/js/player/player.js"></script>-->
+<script type="text/javascript" src="build/website-ui.min.js"></script>
 <script type="text/javascript">
 angular.module("music",['website.ui'])
     .controller('MusicDemoCtrl',function($scope){
