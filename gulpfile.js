@@ -2,10 +2,13 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var jshint = require('gulp-jshint');
+var imagemin = require('gulp-imagemin');
+var pngcrush = require('imagemin-pngcrush');
 
 var path = {
 scripts:['src/*.js','src/**/*.js'],
-css:"src/css/*"
+css:"src/css/*",
+images:'src/img/*'
 };
 
 gulp.task('concat', function () {
@@ -31,5 +34,14 @@ gulp.task('uglify', function () {
         .pipe(concat('website-ui.min.js'))
         .pipe(gulp.dest('./build'));
 });
+gulp.task('imagemin', function () {
+  return gulp.src(path.images)
+      .pipe(imagemin({
+        progressive: true,
+        svgoPlugins: [{removeViewBox: false}],
+        use: [pngcrush()]
+      }))
+      .pipe(gulp.dest('./build/img'));
+});
 
-gulp.task('default', ['concat','jshint','uglify','cssmin']);
+gulp.task('default', ['concat','jshint','uglify','cssmin','imagemin']);
