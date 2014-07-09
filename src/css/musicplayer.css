@@ -49,6 +49,18 @@ music-player style-----------------*/
   left: 60px;
   background-position: -23px -40px;
 }
+.pause-ab{
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  background-position: -63px -0px;
+}
+.pause-ab:hover{
+  position: absolute;
+  top: 40px;
+  left: 60px;
+  background-position: -63px -40px;
+}
 .play{
   background-position: -3px -111px;
 }

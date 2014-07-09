@@ -8,6 +8,7 @@ angular.module("website.ui.player",[])
       var currentIndex = $scope.currentIndex = 0;
       $scope.volume = 100;
       $scope.autoplay = true;
+      $scope.isPlaying = true;
       $scope.list = (function(){return $scope.list;})();
       if(!angular.isArray($scope.list)||$scope.list.length == 0){
         var obj = {};
@@ -78,17 +79,22 @@ angular.module("website.ui.player",[])
          */
         angular.forEach(playBtn,function(ele,i){
           angular.element(ele).on('click',function(evt){
+            var isPlaying = true;
             if(audio.paused){
               audio.play();
               imageRotation(music_img);
-
+              isPlaying = true;
             }else{
               audio.pause();
               if(imageRotateInterval){
                 clearInterval(imageRotateInterval);
                 imageRotateInterval = null;
               }
+              isPlaying = false;
             }
+            scope.$apply(function(){
+              scope.isPlaying = isPlaying;
+            })
           });
         });
 
@@ -143,24 +149,31 @@ angular.module("website.ui.player",[])
                 scope.currentMusic.time = format_time;
               });
             },0);
-          }
+          };
           /**
            *
            */
           audio.addEventListener('timeupdate',timeUpdateHandler,true);
+          var isPlaying = true;
           if(scope.autoplay){
             audio.play();
+            isPlaying = true;
             if(!imageRotateInterval){
               imageRotation(music_img);
             }
+          }else{
+            isPlaying = false
           }
+          scope.$apply(function(){
+            scope.isPlaying = isPlaying;
+          });
           audio.addEventListener('ended',function(){
             scope.$apply(function(){
               scope.currentMusic = MusicPlayerService.getNext(scope);
             });
 //            scope.currentIndex ++;
           },true);
-        }
+        };
         audio.addEventListener('canplaythrough',canPlayThroughHandler,true);
       };
 
@@ -208,7 +221,7 @@ angular.module("website.ui.player",[])
           '<div class="row">'+
             '<div class="col-md-4">'+
               '<div class="music-img" id = "music_img"></div>'+
-              '<div class="ctrl play-ab" name="play"></div></div>'+
+              '<div ng-class="isPlaying ? \'pause-ab ctrl\' : \'play-ab ctrl\'" name="play"></div></div>'+
 
             '<div class="col-md-8">'+
               '<div class="">标题:{{currentMusic.title}}</div>'+
@@ -218,7 +231,7 @@ angular.module("website.ui.player",[])
                   '<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{currentMusic.currentPlayDuration}}%"></div></div>'+
                 '<div style="float: left;margin-left:5px;">{{currentMusic.time}}</div>'+
                 '<ul style="clear:both;">'+
-                  '<li class="ctrl pause" name="play"></li>'+
+                  '<li ng-class="isPlaying ? \'pause ctrl\' : \'play ctrl\'" name="play"></li>'+
                   '<li class="ctrl next" id="nextSong"></li>'+
                   '<li class="ctrl ctrl-sm volume"></li>'+
                   '<li>'+

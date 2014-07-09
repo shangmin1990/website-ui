@@ -5,7 +5,7 @@
       <div class="music-img" id = "music_img">
 
       </div>
-      <div class="ctrl play-ab" name="play"></div>
+      <div ng-class="isPlaying ? 'pause-ab ctrl':'play-ab ctrl'" name="play"></div>
     </div>
     <div class="col-md-8">
       <div class="">标题:{{currentMusic.title}}</div>
@@ -20,7 +20,7 @@
         </div>
         <div style="float: left;margin-left:5px;">{{currentMusic.time}}</div>
         <ul style="clear:both;">
-          <li class="ctrl pause" name="play"></li>
+          <li ng-class="isPlaying?'pause ctrl':'play ctrl'" name="play"></li>
           <li class="ctrl next" id="nextSong"></li>
           <li class="ctrl ctrl-sm volume"></li>
           <li>
