@@ -14,7 +14,7 @@ images:'src/img/*'
 gulp.task('concat', function () {
     gulp.src(path.scripts)
         .pipe(concat('website-ui.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build/js'));
 });
 
 gulp.task('jshint', function () {
@@ -25,14 +25,14 @@ gulp.task('jshint', function () {
 gulp.task('cssmin',function(){
   return gulp.src(path.css)
       .pipe(concat('all.min.css'))
-      .pipe(gulp.dest('./build'));
+      .pipe(gulp.dest('./build/css'));
 });
 
 gulp.task('uglify', function () {
     gulp.src(path.scripts)
         .pipe(uglify())
         .pipe(concat('website-ui.min.js'))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build/js'));
 });
 gulp.task('imagemin', function () {
   return gulp.src(path.images)
