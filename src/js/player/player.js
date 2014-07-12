@@ -217,7 +217,7 @@ angular.module("website.ui.player",[])
           }
         }
     }).run(['$templateCache',function($templateCache){
-      $templateCache.put('template/musicplayer.html','<div class="container" >'+
+      $templateCache.put('template/musicplayer.html','<div>'+
           '<div class="player-panel">'+
           '<div class="row">'+
             '<div class="col-md-4">'+

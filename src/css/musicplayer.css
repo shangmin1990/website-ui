@@ -99,9 +99,13 @@ li {
   float: left;
 }
 .player-panel{
-  border: 1px solid #b2dba1;
-  width:400px;
+  border-radius: 20px;
+  width:350px;
   background-color: #e9eaea;
+  -webkit-box-shadow:0 0 20px rgba(0, 255, 0, .5);
+  -moz-box-shadow:0 0 20px rgba(0, 255, 0, .5);
+  -ms-box-shadow:0 0 20px rgba(0, 255, 0, .5);
+  box-shadow:0 0 20px rgba(0, 255, 0, .5);
 }
 .volume-bar{
   height: 5px;
