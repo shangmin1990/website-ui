@@ -14,7 +14,7 @@ images:'src/img/*'
 gulp.task('concat', function () {
     gulp.src(path.scripts)
         .pipe(concat('website-ui.js'))
-        .pipe(gulp.dest('./build/js'));
+        .pipe(gulp.dest('./bower-website-ui/js'));
 });
 
 gulp.task('jshint', function () {
@@ -25,14 +25,14 @@ gulp.task('jshint', function () {
 gulp.task('cssmin',function(){
   return gulp.src(path.css)
       .pipe(concat('all.min.css'))
-      .pipe(gulp.dest('./build/css'));
+      .pipe(gulp.dest('./bower-website-ui/css'));
 });
 
 gulp.task('uglify', function () {
     gulp.src(path.scripts)
         .pipe(uglify())
         .pipe(concat('website-ui.min.js'))
-        .pipe(gulp.dest('./build/js'));
+        .pipe(gulp.dest('./bower-website-ui/js'));
 });
 gulp.task('imagemin', function () {
   return gulp.src(path.images)
@@ -41,7 +41,7 @@ gulp.task('imagemin', function () {
         svgoPlugins: [{removeViewBox: false}],
         use: [pngcrush()]
       }))
-      .pipe(gulp.dest('./build/img'));
+      .pipe(gulp.dest('./bower-website-ui/img'));
 });
 
 gulp.task('default', ['concat','jshint','uglify','cssmin','imagemin']);

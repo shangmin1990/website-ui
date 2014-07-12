@@ -1,6 +1,7 @@
 /**
  * obj.time = '0.00'
  *  obj.currentPlayDuration = 0;
+ *  author:Benjamin
  */
 angular.module("website.ui.player",[])
     .controller("MusicPlayerCtrl",['$scope',function($scope){
