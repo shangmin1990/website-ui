@@ -3,7 +3,7 @@
  *  obj.currentPlayDuration = 0;
  *  author:Benjamin
  */
-angular.module("website.ui.player",[])
+angular.module("ui.website.player",[])
     .controller("MusicPlayerCtrl",['$scope',function($scope){
       $scope.mode = 'order';
       var currentIndex = $scope.currentIndex = 0;
