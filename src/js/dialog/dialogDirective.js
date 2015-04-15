@@ -42,7 +42,7 @@ angular.module('ui.website.dialog.directives', [])
         restrict:'EA',
         transclude: true,
 //        replace:true,
-        templateUrl:'partial/confirm.html',
+        templateUrl:'template/confirm.html',
         compile: function(ele, attrs, transclude){
           function hide(){
             ele.children().removeClass('in');
