@@ -4,7 +4,7 @@ angular.module('ui.website.dialog.directives', [])
         restrict:'EA',
         transclude: true,
 //        replace:true,
-        templateUrl:'partial/alert.html',
+        templateUrl:'template/alert.html',
         compile: function(ele, attrs, transclude){
           function hide(){
             ele.children().removeClass('in');
@@ -90,7 +90,7 @@ angular.module('ui.website.dialog.directives', [])
         restrict:'EA',
         transclude: true,
 //        replace:true,
-        templateUrl:'partial/confirm.html',
+        templateUrl:'template/confirm.html',
         compile: function(ele, attrs, transclude){
           function link(scope, ele, attrs, ctrls){
 //        var self_ = this;
