@@ -35,8 +35,11 @@ angular.module('ui.website.dialog.service', [])
           scope.ok = success;
           $compile(wconfirm)(scope);
         },
-        prompt: function(callback, title){
+        prompt: function(option){
           var wprompt = $document.find('wprompt');
+          if(!option){
+            option = {};
+          }
           if(wprompt.length == 0){
             wprompt = angular.element('<wprompt title="'+title+'"><input type="text" class="form-control" style="width: 70%; margin-left: 15%"/></wprompt>');
             $document.find('body').append(wprompt);
@@ -44,11 +47,12 @@ angular.module('ui.website.dialog.service', [])
             wprompt.html('<input type="text" class="form-control" style="width: 70%; margin-left: 15%"/>');
           }
           var scope = $rootScope.$new(false);
-          if(!title){
-            title = "请输入";
-          }
-          scope.title = title;
-          scope.callback = callback;
+//          if(!option.title){
+//            option.title = "请输入";
+//          }
+//          scope.title = option.title;
+//          scope.callback = option.callback;
+          scope.option = option;
           $compile(wprompt)(scope);
         }
       }

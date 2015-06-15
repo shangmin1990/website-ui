@@ -98,11 +98,24 @@ angular.module('ui.website.dialog.directives', [])
             angular.element(children[0])
                 .unbind('click')
                 .bind('click', function(evt){
-                  var result = scope.callback(ele.find('input').val());
-                  if((typeof result === 'boolean' && result) || result === 1){
-                    hide();
+                  if(!scope.option.ajax){
+                    var result = scope.option.callback(ele.find('input').val());
+                    if((typeof result === 'boolean' && result) || result === 1){
+                      hide();
+                    }else{
+                      ele.find('input').parent().addClass('has-error').addClass('has-feedback');
+                    }
                   }else{
-                    ele.find('input').parent().addClass('has-error').addClass('has-feedback');
+                    scope.option.callback(ele.find('input').val(), function(data){
+                      if(scope.option.success){
+                        scope.option.success(data);
+                      }
+                      hide();
+                    }, function(status){
+                      if(scope.option.error){
+                        scope.option.error(status);
+                      }
+                    });
                   }
 //                  hide();
                 });
