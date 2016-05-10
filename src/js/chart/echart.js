@@ -314,26 +314,32 @@ angular.module("ui.website.chart",[])
                     option.xAxis[0].data = originalData.category;
                     return option;
                 }else if (chart == 'pie'){
-                    for(var i = 0 ; i < x.length; i++){
-                        var yAxisDataItem = {
-                            name: x[i],
-                            value: y[i],
-                            itemStyle: {
-                            normal: {
-                                color: style.color[i % style.color.length]
-                            },
-                            emphasis: {
-                                label: {
-                                    show:false
+                    for(var j =0 ; j< y.length; j++){
+                        var yDataItem = y[j];
+                        if(!yDataItem || yDataItem.length != x.length){
+                            throw new Error('Data error, check your data please');
+                        }
+                        for(var i = 0 ; i < x.length; i++){
+                            var yAxisDataItem = {
+                                name: x[i],
+                                value: y[j][i],
+                                itemStyle: {
+                                    normal: {
+                                        color: style.color[i % style.color.length]
+                                    },
+                                    emphasis: {
+                                        label: {
+                                            show:false
+                                        }
+                                    }
                                 }
                             }
+                            yAxisDatas.push(yAxisDataItem);
                         }
-                        }
-                        yAxisDatas.push(yAxisDataItem);
+                        option.series[j].data = yAxisDatas;
+                        option.legend.data = originalData.category;
+                        return option;
                     }
-                    option.series[0].data = yAxisDatas;
-                    option.legend.data = originalData.category;
-                    return option;
                 }
             }
         }
@@ -370,7 +376,7 @@ angular.module("ui.website.chart",[])
                 config: '@',
                 // 数据 格式: {category:[], data:[[],[],[]]}
                 data: '=',
-                style: '=chartStyle'
+                chartStyle: '@'
             },
             templateUrl: 'website-ui/chart/no-data.html',
             replace: false,
@@ -388,8 +394,13 @@ angular.module("ui.website.chart",[])
                     var config_ = {};
                     var style_ = {};
                     try{
-                        config_ = JSON.parse(scope.config);
-                        style_ = JSON.parse(scope.style);
+                        if(scope.config){
+                            config_ = JSON.parse(scope.config);
+                        }
+                        if(scope.chartStyle){
+                            style_ = JSON.parse(scope.chartStyle);
+                        }
+
                     } catch (e){
 
                     }

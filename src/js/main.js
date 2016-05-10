@@ -4,5 +4,6 @@
  */
 angular.module("ui.website",[
     'ui.website.player',
-    'ui.website.dialog'
+    'ui.website.dialog',
+    'ui.website.chart'
 ])
