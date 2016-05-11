@@ -1,6 +1,3 @@
-[submodule "gh-pages"]
-	path = gh-pages
-	url = https://github.com/shangmin1990/website-ui.git
 [submodule "bower-website-ui"]
 	path = bower-website-ui
 	url = https://github.com/shangmin1990/bower-website-ui.git
