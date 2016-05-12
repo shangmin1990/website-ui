@@ -7,6 +7,7 @@ angular.module("ui.website.chart",[])
         /**
          * highcharts 类型
          * @type
+         * @deprecated 不在支持highcharts类型
          */
         var defaultHighchartOptionsMap = {
             // 平滑曲线图
@@ -103,6 +104,41 @@ angular.module("ui.website.chart",[])
         };
 
         var defaultEChartOptionsMap = {
+            line: {
+                title: {
+                    text: ''
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:[]
+                },
+                toolbox: {
+                    show: false
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : []
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+
+                ]
+            },
             bar: {
                 "title":{
                     "x":"center"
@@ -195,8 +231,8 @@ angular.module("ui.website.chart",[])
                     {
                         name: '',
                         type: 'pie',
-                        center: ['50%', '45%'],
-                        radius: ['50', '80'],
+                        //center: ['50%', '45%'],
+                        //radius: ['50', '80'],
                         itemStyle: {
                             normal: {
                                 label: {
@@ -229,7 +265,7 @@ angular.module("ui.website.chart",[])
                     if(chartType == 'echarts'){
                         return echarts.init(dom);
                     } else if(chartType == 'highcharts'){
-                        return highcharts.init(dom);
+                        return $(dom).highcharts();
                     }
                 } else if(defaultEChartOptionsMap.hasOwnProperty(chart)){
                     return echarts.init(dom);
@@ -241,22 +277,22 @@ angular.module("ui.website.chart",[])
                 if(!chart){
                     return originalData;
                 }
-                var option = defaultEChartOptionsMap[chart];
+                var option = angular.copy(defaultEChartOptionsMap[chart]);
                 var y = originalData.data;
                 var x = originalData.category;
                 var yAxisDatas = [];
                 var series = [];
                 if(chart == 'bar'){
-
                     for(var j = 0; j < y.length; j++){
                         var perData = y[j];
                         var formatData = [];
                         var seriesItem = {
                             name: '',
-                            type: 'bar',
+                            type: chart,
                             barWidth: 30,
                             data:[]
                         }
+
                         for(var i = 0; i < perData.length; i++){
                             var item = {
                                 name: x[i],
@@ -313,6 +349,94 @@ angular.module("ui.website.chart",[])
                     option.series = series;
                     option.xAxis[0].data = originalData.category;
                     return option;
+                }else if(chart == 'line'){
+                    for(var j = 0; j < y.length; j++){
+                        var perData = y[j];
+                        var formatData = [];
+                        var seriesItem = {
+                            name: '',
+                            type: chart,
+                            data:[]
+                        }
+
+                        for(var i = 0; i < perData.length; i++){
+                            var item = {
+                                name: x[i],
+                                data: perData[i]
+                            }
+                            formatData.push(item);
+                        }
+
+                        for(var i = 0 ; i < formatData.length; i++){
+                            var yAxisDataItem = {
+                                "value": formatData[i].data,
+                                "name": formatData[i].name,
+                                "itemStyle":{
+                                    "normal":{
+                                        "label":{
+                                            "show":true,
+                                            "position":"top",
+                                            "formatter":"{c}%",
+                                            "textStyle":{
+                                                "color":"#37a3fd"
+                                            }
+                                        },
+                                        "labelLine":{
+                                            "show":false
+                                        }
+                                    },
+                                    //    ,
+                                    "emphasis":{
+                                        "label":{
+                                            "show":true,
+                                            "position":"top",
+                                            "formatter":"{c}%",
+                                            "textStyle":{
+                                                "color":"#37a3fd"
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                            yAxisDatas.push(yAxisDataItem);
+                        }
+                        if(style && style.color && style.color.length >= y.length){
+                            var itemStyle = {
+                                "normal":{
+                                    color: style.color[j],
+                                    "label":{
+                                        "show":true,
+                                        "position":"top",
+                                        "formatter":"{c}%",
+                                        "textStyle":{
+                                            "color":"#37a3fd"
+                                        }
+                                    },
+                                    "labelLine":{
+                                        "show":false
+                                    }
+                                },
+                                //    ,
+                                "emphasis":{
+                                    "label":{
+                                        "show":true,
+                                        "position":"top",
+                                        "formatter":"{c}%",
+                                        "textStyle":{
+                                            "color":"#37a3fd"
+                                        }
+                                    }
+                                }
+                            };
+                            seriesItem.itemStyle = itemStyle;
+                        }
+                        seriesItem.data = yAxisDatas;
+                        series.push(seriesItem);
+                    }
+
+                    option.series = series;
+                    option.xAxis[0].data = originalData.category;
+                    return option;
                 }else if (chart == 'pie'){
                     for(var j =0 ; j< y.length; j++){
                         var yDataItem = y[j];
@@ -325,7 +449,7 @@ angular.module("ui.website.chart",[])
                                 value: y[j][i],
                                 itemStyle: {
                                     normal: {
-                                        color: style.color[i % style.color.length]
+                                        //color: style.color[i % style.color.length]
                                     },
                                     emphasis: {
                                         label: {
@@ -333,11 +457,20 @@ angular.module("ui.website.chart",[])
                                         }
                                     }
                                 }
+                            };
+                            if(style.color && style.color.length >= x.length){
+                                yAxisDataItem.itemStyle.normal.color = style.color[i]
                             }
                             yAxisDatas.push(yAxisDataItem);
                         }
                         option.series[j].data = yAxisDatas;
                         option.legend.data = originalData.category;
+                        if(style.center){
+                            option.series[j].center = style.center;
+                        }
+                        if(style.radius){
+                            option.series[j].radius = style.radius;
+                        }
                         return option;
                     }
                 }
@@ -363,7 +496,7 @@ angular.module("ui.website.chart",[])
                 orientation: 'horizontal'
             },
             pie: {
-                color: ["#42ccff", "#fbd444"]
+                //color: ["#42ccff", "#fbd444"]
             }
         }
         return {
@@ -376,6 +509,8 @@ angular.module("ui.website.chart",[])
                 config: '@',
                 // 数据 格式: {category:[], data:[[],[],[]]}
                 data: '=',
+                eventType: '@',
+                eventHandler: '&',
                 chartStyle: '@'
             },
             templateUrl: 'website-ui/chart/no-data.html',
@@ -410,12 +545,17 @@ angular.module("ui.website.chart",[])
                     var chartType;
                     if(attrs.hasOwnProperty('echarts')){
                         chartType = 'echarts';
-                    } else if(attrs.hasOwnProperty('highcharts')){
-                        chartType = 'highcharts';
                     }
                     var chart_dom = ele.find('div').find('div')[0];
                     //alert(chart_dom.id);
                     var chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
+                    if(scope.eventType && scope.eventHandler){
+                        chartInstance.on(scope.eventType, function(param){
+                            scope.eventHandler()(param);
+                            //alert('a');
+                        });
+                        console.log('绑定事件成功');
+                    }
                     if(config.showLoading){
                         chartInstance.showLoading();
                     }

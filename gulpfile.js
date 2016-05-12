@@ -10,7 +10,7 @@ scripts:['src/*.js','src/**/*.js'],
 css:"src/css/*",
 images:'src/img/*'
 };
-var projectPath = '../personal-web-site/lib/bower-website-ui/';
+var projectPath = '../../matrix2/lib/bower-website-ui/';
 
 gulp.task('concat', function () {
     gulp.src(path.scripts)
