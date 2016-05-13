@@ -273,17 +273,22 @@ angular.module("ui.website.chart",[])
                     return highcharts.init(dom);
                 }
             },
-            getOption: function(chart, originalData, style, formatter){
+            getOption: function(chart, originalData, style, formatter, config){
                 if(!chart){
                     return originalData;
                 }
                 var option = angular.copy(defaultEChartOptionsMap[chart]);
-                if(formatter){
+
+                if(formatter()){
                     option.tooltip.formatter = formatter();
                 }
 
                 var y = originalData.data;
                 var x = originalData.category;
+                if(config.limit > 0 && x.length > config.limit){
+                    x = x.slice(0, config.limit);
+                    //y = y.slice(0, config.limit);
+                }
                 var series = [];
                 if(chart == 'bar'){
                     for(var j = 0; j < y.length; j++){
@@ -296,7 +301,10 @@ angular.module("ui.website.chart",[])
                             barWidth: 30,
                             data:[]
                         }
-
+                        if(config.limit > 0 && x.length > config.limit){
+                            perData = perData.slice(0, config.limit);
+                            //y = y.slice(0, config.limit);
+                        }
                         for(var i = 0; i < perData.length; i++){
                             var item = {
                                 name: x[i],
@@ -305,20 +313,26 @@ angular.module("ui.website.chart",[])
                             formatData.push(item);
                         }
                         // array 浅copy一份
-                        var formatDataCopy = formatData.concat();
-                        formatDataCopy.sort(function(a, b){
-                            return Number(b.data) - Number(a.data);
-                        });
-                        for(var i = 0; i < formatDataCopy.length; i++){
-                            formatDataCopy[i].color = style.color[i % style.color.length];
+                        var sortForColor = config && config.sortForColor;
+                        var color = style && style.color && style.color.length >= y.length && style.color[0].length >= perData.length;
+                        if(sortForColor && color){
+                            var formatDataCopy = formatData.concat();
+                            formatDataCopy.sort(function(a, b){
+                                return Number(b.data) - Number(a.data);
+                            });
+                            for(var i = 0; i < formatDataCopy.length; i++){
+                                formatDataCopy[i].color = style.color[j][i];
+                            }
+                            //formatData = formatDataCopy;
                         }
+
                         for(var i = 0 ; i < formatData.length; i++){
                             var yAxisDataItem = {
                                 "value": formatData[i].data,
                                 "name": formatData[i].name,
                                 "itemStyle":{
                                     "normal":{
-                                        "color":formatData[i].color,
+                                        //"color":formatData[i].color,
                                         "label":{
                                             "show":true,
                                             "position":"top",
@@ -344,6 +358,9 @@ angular.module("ui.website.chart",[])
                                     }
                                 }
                             };
+                            if(formatData[i].color){
+                                yAxisDataItem.itemStyle.normal.color = formatData[i].color;
+                            }
                             yAxisDatas.push(yAxisDataItem);
                         }
                         seriesItem.data = yAxisDatas;
@@ -421,6 +438,7 @@ angular.module("ui.website.chart",[])
                     option.xAxis[0].data = originalData.category;
                     return option;
                 }else if (chart == 'pie'){
+
                     for(var j =0 ; j< y.length; j++){
                         var yAxisDatas = [];
                         var yDataItem = y[j];
@@ -442,8 +460,8 @@ angular.module("ui.website.chart",[])
                                     }
                                 }
                             };
-                            if(style.color && style.color.length >= x.length){
-                                yAxisDataItem.itemStyle.normal.color = style.color[i]
+                            if(style.color && style.color.length >= y.length && style.color[0].length >= x.length){
+                                yAxisDataItem.itemStyle.normal.color = style.color[j][i];
                             }
                             yAxisDatas.push(yAxisDataItem);
                         }
@@ -465,10 +483,10 @@ angular.module("ui.website.chart",[])
         var defaultConfig = {
             // 是否显示loading画面
             showLoading: true,
-            // 是否排序
-            order: true,
+            // 是否按照颜色值排序
+            sortForColor: false,
             // 是否限制显示
-            limit: 10,
+            limit: -1,
             // 没有数据时的提示
             noDataTemplateUrl: 'templates/echarts/no-data.html'
         };
@@ -476,7 +494,7 @@ angular.module("ui.website.chart",[])
         var defaultStyle = {
 
             bar: {
-                color: ["#03a7e5","#03a7e5","#1db5ee","#1db5ee","#42ccff","#42ccff","#7ddcff","#7ddcff","#a6e7ff","#a6e7ff","#a6e7ff"],
+                //color: ["#03a7e5","#03a7e5","#1db5ee","#1db5ee","#42ccff","#42ccff","#7ddcff","#7ddcff","#a6e7ff","#a6e7ff","#a6e7ff"],
                 orientation: 'horizontal'
             },
             pie: {
@@ -547,7 +565,7 @@ angular.module("ui.website.chart",[])
                     scope.$watch('data', function(newValue, oldValue){
                         if(newValue){
                             try{
-                                var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter);
+                                var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
                                 chartInstance.setOption(option);
                                 scope.noData = false;
