@@ -369,6 +369,11 @@ angular.module("ui.website.chart",[])
 
                     option.series = series;
                     option.xAxis[0].data = originalData.category;
+                    if(style.orientation === 'vertical'){
+                        var temp = option.yAxis;
+                        option.yAxis = xAxis;
+                        option.xAxis = temp;
+                    }
                     return option;
                 }else if(chart == 'line'){
                     for(var j = 0; j < y.length; j++){
