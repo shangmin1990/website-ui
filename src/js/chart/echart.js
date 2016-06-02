@@ -515,7 +515,7 @@ angular.module("ui.website.chart",[])
                 //chartType: '@',
                 config: '@',
                 // 数据 格式: {category:[], data:[[],[],[]]}
-                data: '=',
+                chartData: '=data',
                 eventType: '@',
                 eventHandler: '&',
                 chartStyle: '@',
@@ -567,7 +567,7 @@ angular.module("ui.website.chart",[])
                     if(config.showLoading){
                         chartInstance.showLoading();
                     }
-                    scope.$watch('data', function(newValue, oldValue){
+                    scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue){
                             try{
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
@@ -588,8 +588,9 @@ angular.module("ui.website.chart",[])
 }]).run(['$templateCache', function($templateCache){
     var template = [];
     template.push('<div style="position: relative;height: 100%;">');
-    template.push('<div style="height: 100%; width: 100%;">');
+    template.push('<div style="height: 100%; width: 100%;"></div>');
+    template.push('<div id="nodata_container" ng-if="noData" style="height: 100%; width: 100%; position: absolute; left: 0;top: 0;display: flex;align-items: center;justify-content: center">');
+    template.push('<div><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IuWbvuWxgl8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIKCSB2aWV3Qm94PSIwIDAgNTQgNTQiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDU0IDU0OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cgkuc3Qxe2ZpbGw6I0QwRDBEMDt9Cjwvc3R5bGU+CjxnIGlkPSJYTUxJRF8xXyI+Cgk8cGF0aCBpZD0iWE1MSURfMzlfIiBjbGFzcz0ic3QwIiBkPSJNMjcsNTNDMTIuNyw1MywxLDQxLjMsMSwyN0MxLDEyLjcsMTIuNywxLDI3LDFjMTQuMywwLDI2LDExLjcsMjYsMjZDNTMsNDEuMyw0MS4zLDUzLDI3LDUzeiIKCQkvPgoJPHBhdGggaWQ9IlhNTElEXzM2XyIgY2xhc3M9InN0MSIgZD0iTTI3LDJjMTMuOCwwLDI1LDExLjIsMjUsMjVTNDAuOCw1MiwyNyw1MlMyLDQwLjgsMiwyN1MxMy4yLDIsMjcsMiBNMjcsMEMxMi4xLDAsMCwxMi4xLDAsMjcKCQlzMTIuMSwyNywyNywyN3MyNy0xMi4xLDI3LTI3UzQxLjksMCwyNywwTDI3LDB6Ii8+CjwvZz4KPHBhdGggaWQ9IlhNTElEXzEwXyIgY2xhc3M9InN0MSIgZD0iTTI3LDM0LjNMMjcsMzQuM2MtMS4xLDAtMi0wLjktMi0yVjEzYzAtMS4xLDAuOS0yLDItMmgwYzEuMSwwLDIsMC45LDIsMnYxOS4zCglDMjksMzMuNCwyOC4xLDM0LjMsMjcsMzQuM3oiLz4KPGNpcmNsZSBpZD0iWE1MSURfMTRfIiBjbGFzcz0ic3QxIiBjeD0iMjciIGN5PSI0MC40IiByPSIyIi8+Cjwvc3ZnPgo=" height="80" width="80"/> <p style="margin-top: 10px;text-align:center">暂无数据</p></div>');
     template.push('</div>');
-    template.push('<div ng-if="noData" style="height: 100%; width: 100%; position: absolute; left: 0;top: 0;;">暂无数据</div></div>');
     $templateCache.put('website-ui/chart/no-data.html', template.join(''));
 }])
