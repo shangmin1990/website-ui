@@ -568,7 +568,7 @@ angular.module("ui.website.chart",[])
                         chartInstance.showLoading();
                     }
                     scope.$watch('chartData', function(newValue, oldValue){
-                        if(newValue){
+                        if(newValue !== undefined){
                             try{
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
