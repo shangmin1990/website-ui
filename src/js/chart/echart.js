@@ -550,10 +550,10 @@ angular.module("ui.website.chart",[])
                     var config = angular.extend({}, defaultConfig, config_);
                     var style = defaultStyle[scope.chart];
                     var style_extend = angular.extend({}, style, style_);
-                    var chartType;
-                    if(attrs.hasOwnProperty('echarts')){
-                        chartType = 'echarts';
-                    }
+                    var chartType = 'echarts';
+                    //if(attrs.hasOwnProperty('echarts')){
+                    //    chartType = 'echarts';
+                    //}
                     var chart_dom = ele.find('div').find('div')[0];
                     //alert(chart_dom.id);
                     var chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
