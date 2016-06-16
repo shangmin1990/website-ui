@@ -1,6 +1,7 @@
 /**
- * Create by benjamin at 2014/7/4
- * echarts main script
+ * @Author benjamin zhaoyuxiang
+ * @Desc echarts main script
+ * @Date 2016-04-15
  */
 angular.module("ui.website.chart",[])
     .service('ChartService', [function(){
@@ -569,6 +570,11 @@ angular.module("ui.website.chart",[])
                     }
                     scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue !== undefined){
+                            if(newValue == 'loading'){
+                                scope.noData = false;
+                                chartInstance.showLoading();
+                                return;
+                            }
                             try{
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
@@ -578,6 +584,7 @@ angular.module("ui.website.chart",[])
                             }catch (e){
                                 console.error(e.message);
                                 chartInstance.hideLoading();
+                                chartInstance.clear();
                                 scope.noData = true;
                             }
                         }
