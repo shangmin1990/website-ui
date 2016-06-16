@@ -568,9 +568,13 @@ angular.module("ui.website.chart",[])
                     if(config.showLoading){
                         chartInstance.showLoading();
                     }
+                    scope.$on('chart:loading', function(){
+                        scope.noData = false;
+                        chartInstance.showLoading();
+                    });
                     scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue !== undefined){
-                            if(newValue == 'loading'){
+                            if(newValue == 'chart:loading'){
                                 scope.noData = false;
                                 chartInstance.showLoading();
                                 return;
