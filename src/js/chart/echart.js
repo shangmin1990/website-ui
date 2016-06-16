@@ -569,6 +569,11 @@ angular.module("ui.website.chart",[])
                     }
                     scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue !== undefined){
+                            if(newValue == 'loading'){
+                                scope.noData = false;
+                                chartInstance.showLoading();
+                                return;
+                            }
                             try{
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
@@ -578,6 +583,7 @@ angular.module("ui.website.chart",[])
                             }catch (e){
                                 console.error(e.message);
                                 chartInstance.hideLoading();
+                                chartInstance.clear();
                                 scope.noData = true;
                             }
                         }
