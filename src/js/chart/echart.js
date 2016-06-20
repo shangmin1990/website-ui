@@ -565,6 +565,9 @@ angular.module("ui.website.chart",[])
                         });
                         console.log('绑定事件成功');
                     }
+                    scope.$on('chart:resize', function(){
+                        chartInstance.resize();
+                    });
                     if(config.showLoading){
                         chartInstance.showLoading();
                     }
