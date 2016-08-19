@@ -598,8 +598,8 @@ angular.module("ui.website.chart",[])
                             }catch (e){
                                 console.error(e.message);
                                 chartInstance.hideLoading();
-                                chartInstance.clear();
                                 scope.noData = true;
+                                chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
                             }
                         }
                     });
