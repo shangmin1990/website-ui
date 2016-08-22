@@ -558,26 +558,31 @@ angular.module("ui.website.chart",[])
                     //if(attrs.hasOwnProperty('echarts')){
                     //    chartType = 'echarts';
                     //}
-                    var chart_dom = ele.find('div').find('div')[0];
-                    //alert(chart_dom.id);
-                    var chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
-                    if(scope.eventType && scope.eventHandler){
-                        chartInstance.on(scope.eventType, function(param){
-                            scope.eventHandler()(param);
-                            //alert('a');
+
+                    function echartsInit(){
+                        var chart_dom = ele.find('div').find('div')[0];
+                        //alert(chart_dom.id);
+                        var chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
+                        if(scope.eventType && scope.eventHandler){
+                            chartInstance.on(scope.eventType, function(param){
+                                scope.eventHandler()(param);
+                                //alert('a');
+                            });
+                            console.log('绑定事件成功');
+                        }
+                        scope.$on('chart:resize', function(){
+                            chartInstance.resize();
                         });
-                        console.log('绑定事件成功');
+                        if(config.showLoading){
+                            chartInstance.showLoading();
+                        }
+                        scope.$on('chart:loading', function(){
+                            scope.noData = false;
+                            chartInstance.showLoading();
+                        });
+                        return chartInstance;
                     }
-                    scope.$on('chart:resize', function(){
-                        chartInstance.resize();
-                    });
-                    if(config.showLoading){
-                        chartInstance.showLoading();
-                    }
-                    scope.$on('chart:loading', function(){
-                        scope.noData = false;
-                        chartInstance.showLoading();
-                    });
+                    var chartInstance = echartsInit();
                     scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue !== undefined){
                             if(newValue == 'chart:loading'){
@@ -598,8 +603,8 @@ angular.module("ui.website.chart",[])
                             }catch (e){
                                 console.error(e.message);
                                 chartInstance.hideLoading();
-                                chartInstance.clear();
                                 scope.noData = true;
+                                chartInstance = echartsInit();
                             }
                         }
                     });
