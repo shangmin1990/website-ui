@@ -211,7 +211,10 @@ angular.module("ui.website.chart",[])
                 legend: {
                     orient: 'horizontal',
                     y: 'bottom',
-                    data: []
+                    data: [],
+                    itemHeight: 7,
+                    itemGap:26,
+                    icon:'circle'
                 },
                 tooltip : {
                     trigger: 'item',
