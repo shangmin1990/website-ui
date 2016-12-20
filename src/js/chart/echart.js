@@ -177,7 +177,8 @@ angular.module("ui.website.chart",[])
                         "axisLabel":{
                             "show":true,
                             "interval":"0",
-                            "margin":15
+                            "margin":15,
+                            "textStyle": {color: "#000"}
                         },
                         "axisLine":{
                             "show":true,
