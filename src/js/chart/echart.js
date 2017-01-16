@@ -606,9 +606,9 @@ angular.module("ui.website.chart",[])
                                 //scope.noData = true;
                             }catch (e){
                                 console.error(e.message);
-                                chartInstance.hideLoading();
                                 scope.noData = true;
                                 chartInstance = echartsInit();
+                                chartInstance.hideLoading();
                             }
                         }
                     });
