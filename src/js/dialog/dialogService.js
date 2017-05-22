@@ -1,7 +1,7 @@
 angular.module('ui.website.dialog.service', [])
-    .factory('DialogService', ['$document','$compile','$rootScope', function($document, $compile, $rootScope){
+    .factory('DialogService', ['$document','$compile','$rootScope', '$http', function($document, $compile, $rootScope, $http){
       return {
-        alert: function(content, title){
+        alert: function(title, content){
           var walert = $document.find('walert');
           if(walert.length == 0){
             walert = angular.element('<walert title="'+title+'">'+content+'</walert>');
@@ -17,7 +17,7 @@ angular.module('ui.website.dialog.service', [])
           scope.title = title;
           $compile(walert)(scope);
         },
-        confirm: function(content, success, title){
+        confirm: function(title, content, success){
           var wconfirm = $document.find('wconfirm');
           if(wconfirm.length == 0){
             wconfirm = angular.element('<wconfirm title="'+title+'" >'+content+'</wconfirm>');
@@ -60,6 +60,19 @@ angular.module('ui.website.dialog.service', [])
           scope.option = option;
           scope.title = option.title;
           $compile(wprompt)(scope);
+        },
+        dialog: function(templateUrl){
+          var scope = $rootScope.$new(false);
+          var dialog = $document.find('dialog');
+          if(dialog){
+            dialog.remove();
+          }
+          var html = $http.get(templateUrl).success(function(res){
+            dialog = angular.element('<dialog>'+res + '</dialog>');
+            $document.find('body').append(dialog);
+            $compile(dialog)(scope);
+          })
+
         }
       }
     }])
