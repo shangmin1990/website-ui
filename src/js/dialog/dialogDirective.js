@@ -214,7 +214,7 @@ angular.module('ui.website.dialog.directives', [])
 
         $templateCache.put('template/dialog.html',
             '<div class="modal fade" style="display:block;">'+
-            '<div class="modal-dialog" style="width:100px; padding:0 50px">'+
+            '<div class="modal-dialog" style="width:100%; padding:0 50px">'+
             '<div class="modal-content">'+
             '<div ng-transclude></div>'+
             // '<div class="modal-header">'+
