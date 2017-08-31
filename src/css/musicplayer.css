@@ -92,13 +92,13 @@ music-player style-----------------
 .volume{
   background-position: 0px -182px;
 }
-ul,ol{
-  list-style:none;
-}
-li {
-  display: block;
-  float: left;
-}
+/*ul,ol{*/
+  /*list-style:none;*/
+/*}*/
+/*li {*/
+  /*display: block;*/
+  /*float: left;*/
+/*}*/
 .player-panel{
   border-radius: 20px;
   width:350px;

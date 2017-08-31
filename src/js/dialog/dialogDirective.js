@@ -147,12 +147,18 @@ angular.module('ui.website.dialog.directives', [])
     .directive('dialog', ['$timeout', '$http', function($timeout, $http){
         return {
             restrict:'EA',
+            scope: false,
             transclude: true,
             templateUrl:'template/dialog.html',
             compile: function(ele, attrs, transclude, ctrls){
                 ele.show();
                 ele[0].style.display = 'block';
                 ele.children().addClass('in');
+                ele.find('.modal-header .closeimg').on('click', function(){
+                    ele[0].style.display = 'none';
+                    ele.children().removeClass('in');
+                    ele.remove();
+                })
             }
         }
     }])
@@ -216,25 +222,13 @@ angular.module('ui.website.dialog.directives', [])
             '<div class="modal fade" style="display:block;">'+
             '<div class="modal-dialog" style="width:100%; padding:0 50px">'+
             '<div class="modal-content">'+
+            '<div class="modal-header" style="position: relative;">'+
+            '<h4>{{title}}</h4>'+
+            '<span class="glyphicon glyphicon-remove closeimg"></span>'+
+            '</div>'+
+            '<div class="modal-body text-center">'+
             '<div ng-transclude></div>'+
-            // '<div class="modal-header">'+
-            // '<div class="row">'+
-            // '<div class="col-md-9 col-lg-9">{{title}}</div>'+
-            // '<div class="col-md-3 col-lg-3">'+
-            // '<button type="button" class="close">'+
-            // '<span>×</span>'+
-            // '</button>'+
-            // '</div>'+
-            // '</div>'+
-            // '</div>'+
-            // '<div class="modal-body text-center">'+
-            // '<p>'+
-            // '<div ng-transclude></div>'+
-            // '</p>'+
-            // '</div>'+
-            // '<div class="modal-footer">'+
-            // '<button type="button" class="btn btn-primary">确定</button>'+
-            // '</div>'+
+            '</div>'+
             '</div>'+
             '</div>'+
             '</div>'+

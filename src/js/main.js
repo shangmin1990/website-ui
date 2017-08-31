@@ -5,5 +5,6 @@
 angular.module("ui.website",[
     'ui.website.player',
     'ui.website.dialog',
-    'ui.website.chart'
+    'ui.website.chart',
+    'ui.website.fileupload'
 ])

@@ -61,18 +61,22 @@ angular.module('ui.website.dialog.service', [])
           scope.title = option.title;
           $compile(wprompt)(scope);
         },
-        dialog: function(templateUrl){
-          var scope = $rootScope.$new(false);
-          var dialog = $document.find('dialog');
-          if(dialog){
-            dialog.remove();
-          }
+        dialog: function(title, templateUrl, scope){
+          // var scope = $rootScope.$new(false);
+          var dialog;
+          var dialog_id = uuid();
           var html = $http.get(templateUrl).success(function(res){
-            dialog = angular.element('<dialog>'+res + '</dialog>');
+            dialog = angular.element('<dialog >'+res + '</dialog>');
+            dialog.attr('id', dialog_id);
             $document.find('body').append(dialog);
+            scope.title = title;
             $compile(dialog)(scope);
           })
-
+          return dialog_id;
+        },
+        close: function(id){
+          var dialog = angular.element('#' + id);
+          dialog.remove();
         }
       }
     }])

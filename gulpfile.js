@@ -10,7 +10,7 @@ scripts:['src/*.js','src/**/*.js'],
 css:"src/css/*",
 images:'src/img/*'
 };
-var projectPath = '../AdminLTE-template/lib/bower-website-ui/';
+var projectPath = '../sauron-web/lib/bower-website-ui/';
 
 gulp.task('concat', function () {
     gulp.src(path.scripts)
