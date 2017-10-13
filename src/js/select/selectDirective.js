@@ -32,10 +32,10 @@ angular.module('ui.website.select.directives', ['ui.bootstrap.position'])
                             evt.stopPropagation();
                             var li = selectContainer.find('li');
                             if(li){
-                                var value = ele.find('div').html();
+                                var value = ngModelCtrl.$modelValue;
                                 li.removeClass('active');
                                 angular.forEach(li, function(obj, i){
-                                    if($(obj).find('a').html() === value){
+                                    if($(obj).attr('value') === value){
                                         $(obj).addClass('active');
                                     }
                                 })
@@ -50,6 +50,14 @@ angular.module('ui.website.select.directives', ['ui.bootstrap.position'])
 
                         scope.$watch('options', function(newValue){
                             if(newValue && newValue.length > 0){
+                                var value = ngModelCtrl.$modelValue;
+                                if(value){
+                                    angular.forEach(newValue, function(obj){
+                                        if(obj[scope.config.valueFieldName] === value){
+                                            ele.find('div').html(obj[scope.config.displayFieldName]);
+                                        }
+                                    })
+                                }
                                 $timeout(function(){
                                     var li = selectContainer.find('li');
                                     li.bind('click', function(evt){
@@ -91,7 +99,7 @@ angular.module('ui.website.select.directives', ['ui.bootstrap.position'])
     }])
     .run(['$templateCache', function ($templateCache) {
         var html = [];
-        html.push('<div class="pull-left" style="position: relative;">' +
+        html.push('<div style="position: relative;">' +
             // '<input type="text" style="border-radius: 4px" class="form-control" >' +
             '<div style="border-radius: 4px" class="form-control" ></div>' +
             '<i class="fa fa-sort" style="position: absolute;right: 5px;top: 0px;height: 100%;padding-top: 10px; transform: scaleX(0.8)"></i></div>');
