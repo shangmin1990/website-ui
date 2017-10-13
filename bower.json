@@ -5,7 +5,7 @@
       "bootstrap":"3.*.*",
       "angular":"1.*.*",
       "echarts": "3.1.2",
-      "highcharts": ""
+      "angular-bootstrap": "2.5.0"
   },
   "repository":{
       "type":"git",
