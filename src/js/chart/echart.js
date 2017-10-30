@@ -611,7 +611,7 @@ angular.module("ui.website.chart",[])
                                 chartInstance.hideLoading();
                             }
                         }
-                    });
+                    }, true);
                 }
             }
         }
