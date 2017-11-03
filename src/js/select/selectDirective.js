@@ -159,8 +159,8 @@ angular.module('ui.website.select.directives', ['ui.bootstrap.position'])
                             var optionsArr = [];
                             angular.forEach(options, function(optionEle, i){
                                 var optionItem = {};
-                                optionItem[scope.config.displayFieldName] = $(optionEle).attr("value");
-                                optionItem[scope.config.valueFieldName] = $(optionEle).html();
+                                optionItem[scope.config.valueFieldName] = $(optionEle).attr("value");
+                                optionItem[scope.config.displayFieldName] = $(optionEle).html();
                                 optionsArr.push(optionItem);
                             })
                             scope.options = optionsArr;

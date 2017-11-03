@@ -66,7 +66,7 @@ angular.module('ui.website.dialog.service', [])
           var dialog;
           var dialog_id = uuid();
           var html = $http.get(templateUrl).success(function(res){
-            dialog = angular.element('<dialog >'+res + '</dialog>');
+            dialog = angular.element('<ws-dialog >'+res + '</ws-dialog>');
             dialog.attr('id', dialog_id);
             $document.find('body').append(dialog);
             scope.title = title;

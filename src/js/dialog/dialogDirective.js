@@ -144,7 +144,7 @@ angular.module('ui.website.dialog.directives', [])
             }
         }
     }])
-    .directive('dialog', ['$timeout', '$http', function($timeout, $http){
+    .directive('wsDialog', ['$timeout', '$http', function($timeout, $http){
         return {
             restrict:'EA',
             scope: false,
