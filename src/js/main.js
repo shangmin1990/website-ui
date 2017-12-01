@@ -7,5 +7,6 @@ angular.module("ui.website",[
     'ui.website.dialog',
     'ui.website.chart',
     'ui.website.fileupload',
-    'ui.website.select'
+    'ui.website.select',
+    'ui.website.loading'
 ])
