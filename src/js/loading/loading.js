@@ -16,6 +16,7 @@ angular.module('ui.website.loading', [])
                         var scope = $rootScope.$new(true);
                         loadingEle = $compile(loadingDirective)(scope);
                     }
+                    this.initSize(ele);
                     $timeout(function () {
                         loadingEle.show();
                         loadingEle.find('div').show();
@@ -32,6 +33,21 @@ angular.module('ui.website.loading', [])
             hideUseElement: function (ele) {
                 var loadingEle = ele.find('ws-loading');
                 loadingEle.hide();
+            },
+            initSize: function (ele) {
+                var parent = ele.parent();
+                var width = parent.width();
+                var minHeight = 100;
+                var height = parent.height() >= minHeight ? parent.height(): minHeight;
+                var children = ele.children();
+                $(children[0]).css({
+                    height: height + 'px',
+                    width: width + 'px'
+                });
+                ele.css({
+                    height: height + 'px',
+                    width: width + 'px'
+                });
             }
         }
     }])
@@ -43,9 +59,13 @@ angular.module('ui.website.loading', [])
             scope.$watch('promise.$$state.status', function (newValue, oldValue) {
                 if (newValue !== undefined){
                     if (newValue === 0){
-                        LoadingService.showUseElement(ele.parent(), scope.loadingImg);
+                        $timeout(function () {
+                            LoadingService.showUseElement(ele.parent(), scope.loadingImg);
+                        }, 0);
                     } else {
-                        LoadingService.hideUseElement(ele.parent(), scope.loadingImg);
+                        $timeout(function () {
+                            LoadingService.hideUseElement(ele.parent(), scope.loadingImg);
+                        }, 0)
                     }
                 }
             });
@@ -84,18 +104,8 @@ angular.module('ui.website.loading', [])
             },
             compile: function (ele, attrs, transclude) {
                 $timeout(function () {
-                    var parent = ele.parent();
-                    var width = parent.width();
-                    var minHeight = 100;
-                    var height = parent.height() >= minHeight ? parent.height(): minHeight;
-                    var children = ele.children();
-                    $(children[0]).css({
-                        height: height + 'px',
-                        width: width + 'px'
-                    });
+                    LoadingService.initSize(ele);
                     ele.css({
-                        height: height + 'px',
-                        width: width + 'px',
                         position: 'absolute',
                         'zIndex': 101,
                         background: '#fff'
