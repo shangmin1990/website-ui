@@ -3,6 +3,9 @@ angular.module('ui.website.loading', [])
         return {
             show: function (elementId, imageSrc) {
                 var ele = $document.find('#' + elementId);
+                this.showUseElement(ele);
+            },
+            showUseElement: function (ele, imageSrc) {
                 if (ele.length > 0){
                     var loadingEle = ele.find('ws-loading');
                     if (loadingEle.length == 0){
@@ -14,6 +17,7 @@ angular.module('ui.website.loading', [])
                         loadingEle = $compile(loadingDirective)(scope);
                     }
                     $timeout(function () {
+                        loadingEle.show();
                         loadingEle.find('div').show();
                     }, 0)
                     return loadingEle.attr('id');
@@ -23,34 +27,49 @@ angular.module('ui.website.loading', [])
             },
             hide: function (elementId) {
                 var ele = $document.find('#' + elementId);
+                this.hideUseElement(ele);
+            },
+            hideUseElement: function (ele) {
                 var loadingEle = ele.find('ws-loading');
-                loadingEle.remove();
+                loadingEle.hide();
             }
         }
     }])
-    .directive('wsLoading', ['$timeout', '$rootScope', function($timeout, $rootScope){
+    .directive('wsLoading', ['$timeout', '$rootScope', 'LoadingService', function($timeout, $rootScope, LoadingService){
         function link(scope, ele, attr, ctrl) {
+
             scope.status = 'loading';
-            $rootScope.$on('$wsLoading:loadSuccess', function (evt, id) {
-                scope.status = 'success';
-                if(ele.attr('id') == id){
-                    ele.remove();
+
+            scope.$watch('promise.$$state.status', function (newValue, oldValue) {
+                if (newValue !== undefined){
+                    if (newValue === 0){
+                        LoadingService.showUseElement(ele.parent(), scope.loadingImg);
+                    } else {
+                        LoadingService.hideUseElement(ele.parent(), scope.loadingImg);
+                    }
                 }
             });
 
-            $rootScope.$on('$wsLoading:loadError', function (evt, id) {
-                scope.status = 'error';
-                if(ele.attr('id') == id){
-                    ele.remove();
-                }
-            });
-
-            $rootScope.$on('$wsLoading:loadNoData', function (evt, id) {
-                scope.status = 'noData';
-                if(ele.attr('id') == id){
-                    ele.remove();
-                }
-            });
+            // $rootScope.$on('$wsLoading:loadSuccess', function (evt, id) {
+            //     scope.status = 'success';
+            //     if(ele.attr('id') == id){
+            //         ele.remove();
+            //     }
+            // });
+            //
+            // $rootScope.$on('$wsLoading:loadError', function (evt, id) {
+            //     scope.status = 'error';
+            //     if(ele.attr('id') == id){
+            //         ele.remove();
+            //     }
+            // });
+            //
+            // $rootScope.$on('$wsLoading:loadNoData', function (evt, id) {
+            //     scope.status = 'noData';
+            //     if(ele.attr('id') == id){
+            //         ele.remove();
+            //     }
+            // });
         }
 
         return {
@@ -60,7 +79,8 @@ angular.module('ui.website.loading', [])
             scope:{
                 loadingImg: '@',
                 noDataImg: '@',
-                loadErrorImg: '@'
+                loadErrorImg: '@',
+                promise: '='
             },
             compile: function (ele, attrs, transclude) {
                 $timeout(function () {

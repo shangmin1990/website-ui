@@ -527,7 +527,8 @@ angular.module("ui.website.chart",[])
                 tooltipFormatter: '&',
                 // 更新数据时, legend没有更新,setOption(o, true);
                 // @ http://echarts.baidu.com/api.html#echartsInstance.setOption
-                updateNotMerge: '@'
+                updateNotMerge: '@',
+                promise: '='
             },
             templateUrl: 'website-ui/chart/no-data.html',
             replace: false,
@@ -566,7 +567,11 @@ angular.module("ui.website.chart",[])
                     function echartsInit(){
                         var chart_dom = ele.find('div').find('div')[0];
                         //alert(chart_dom.id);
-                        var chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
+                        var chartInstance = echarts.getInstanceByDom(chart_dom);
+                        if (chartInstance){
+                            chartInstance.dispose();
+                        }
+                        chartInstance = ChartService.getInstance(chart_dom, scope.chart, chartType);
                         if(scope.eventType && scope.eventHandler){
                             chartInstance.on(scope.eventType, function(param){
                                 scope.eventHandler()(param);
@@ -574,26 +579,31 @@ angular.module("ui.website.chart",[])
                             });
                             console.log('绑定事件成功');
                         }
-                        scope.$on('chart:resize', function(){
+
+                        window.onresize = function (evt) {
                             chartInstance.resize();
-                        });
-                        if(config.showLoading){
-                            chartInstance.showLoading();
                         }
-                        scope.$on('chart:loading', function(){
-                            scope.noData = false;
-                            chartInstance.showLoading();
-                        });
+                        // if(config.showLoading){
+                        //     chartInstance.showLoading();
+                        // }
                         return chartInstance;
                     }
+
+                    scope.$watch('promise.$$state.status', function (newValue, oldValue) {
+                        if (newValue !== undefined){
+                            if (newValue === 0){
+                                /**
+                                 * 重新加载
+                                 * @type {boolean}
+                                 */
+                                scope.noData = false;
+                                chartInstance.showLoading();
+                            }
+                        }
+                    })
                     var chartInstance = echartsInit();
                     scope.$watch('chartData', function(newValue, oldValue){
                         if(newValue !== undefined){
-                            if(newValue == 'chart:loading'){
-                                scope.noData = false;
-                                chartInstance.showLoading();
-                                return;
-                            }
                             try{
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
