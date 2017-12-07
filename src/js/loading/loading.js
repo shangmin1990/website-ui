@@ -16,7 +16,10 @@ angular.module('ui.website.loading', [])
                         var scope = $rootScope.$new(true);
                         loadingEle = $compile(loadingDirective)(scope);
                     }
-                    this.initSize(ele);
+
+                    this.initSize(loadingEle);
+                    $(ele.children()[1]).hide();
+
                     $timeout(function () {
                         loadingEle.show();
                         loadingEle.find('div').show();
@@ -33,6 +36,7 @@ angular.module('ui.website.loading', [])
             hideUseElement: function (ele) {
                 var loadingEle = ele.find('ws-loading');
                 loadingEle.hide();
+                $(ele.children()[1]).show();
             },
             initSize: function (ele) {
                 var parent = ele.parent();
@@ -59,13 +63,9 @@ angular.module('ui.website.loading', [])
             scope.$watch('promise.$$state.status', function (newValue, oldValue) {
                 if (newValue !== undefined){
                     if (newValue === 0){
-                        $timeout(function () {
-                            LoadingService.showUseElement(ele.parent(), scope.loadingImg);
-                        }, 0);
+                        LoadingService.showUseElement(ele.parent(), scope.loadingImg);
                     } else {
-                        $timeout(function () {
-                            LoadingService.hideUseElement(ele.parent(), scope.loadingImg);
-                        }, 0)
+                        LoadingService.hideUseElement(ele.parent(), scope.loadingImg);
                     }
                 }
             });

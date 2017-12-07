@@ -489,7 +489,7 @@ angular.module("ui.website.chart",[])
             }
         }
     }])
-    .directive('chart', ['ChartService', function(ChartService){
+    .directive('chart', ['ChartService', '$timeout', function(ChartService, $timeout){
         var defaultConfig = {
             // 是否显示loading画面
             showLoading: true,
@@ -602,9 +602,18 @@ angular.module("ui.website.chart",[])
                         }
                     })
                     var chartInstance = echartsInit();
-                    scope.$watch('chartData', function(newValue, oldValue){
+
+                    var running = false;
+
+                    function paint(newValue) {
                         if(newValue !== undefined){
                             try{
+                                if(newValue.status === 'error'){
+                                    chartInstance.hideLoading();
+                                    chartInstance.clear();
+                                    scope.noData = true;
+                                    return;
+                                }
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
                                 var updateNotMerge = false;
@@ -621,7 +630,43 @@ angular.module("ui.website.chart",[])
                                 chartInstance.hideLoading();
                             }
                         }
+                    }
+
+                    scope.$watch('chartData', function(newValue, oldValue){
+                        if (newValue !== undefined){
+                            // console.log("值比较");
+                            // console.log("旧值:" + oldValue + ",新值" + newValue)
+                            if (!running){
+                                running = true;
+                                paint(newValue);
+                                $timeout(function () {
+                                    running = false;
+                                }, 0);
+                            } else {
+                                // console.log("值比较, 正在运行")
+                            }
+                        }
+
                     }, true);
+
+                    /**
+                     * 解决 如果图表重新加载 还是加载不到数据 则无法触发上边的$watch函数 原因(值比较 一直是false 则无法触发)
+                     */
+                    scope.$watch('chartData', function(newValue, oldValue){
+                        if (newValue !== undefined){
+                            // console.log("引用比较")
+                            // console.log("旧值:" + oldValue + ",新值" + newValue)
+                            if (!running){
+                                running = true;
+                                paint(newValue);
+                                $timeout(function () {
+                                    running = false;
+                                }, 0);
+                            } else {
+                                // console.log("引用比较, 正在运行")
+                            }
+                        }
+                    });
                 }
             }
         }
