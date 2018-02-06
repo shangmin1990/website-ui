@@ -4,6 +4,22 @@
  * @Date 2016-04-15
  */
 angular.module("ui.website.chart",[])
+    .factory('EChartsService', function () {
+        return {
+            getEChartsInstance: function (id) {
+                var $ele = angular.element('#' + id);
+                var $divs = $ele.find('div');
+                if ($divs.length > 0){
+                    for (var i = 0; i < $divs.length; i++){
+                        var child = $divs[i];
+                        if (child.hasAttribute('_echarts_instance_')){
+                            return echarts.getInstanceByDom(child);
+                        }
+                    }
+                }
+            }
+        }
+    })
     .service('ChartService', [function(){
         /**
          * highcharts 类型
