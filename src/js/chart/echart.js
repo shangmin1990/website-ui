@@ -613,7 +613,17 @@ angular.module("ui.website.chart",[])
                                  * @type {boolean}
                                  */
                                 scope.noData = false;
+                                scope.$$loadingStatus = true;
                                 chartInstance.showLoading();
+                            } else if(newValue == 1){
+                                /**
+                                 * 如果promise重新加载了 但数据没有变化 则导致loading动画无法消失
+                                 */
+                                $timeout(function () {
+                                    if (scope.$$loadingStatus){
+                                        chartInstance.hideLoading();
+                                    }
+                                },0);
                             }
                         }
                     })
@@ -626,12 +636,14 @@ angular.module("ui.website.chart",[])
                             try{
                                 if(newValue.status === 'error'){
                                     chartInstance.hideLoading();
+                                    scope.$$loadingStatus = false;
                                     chartInstance.clear();
                                     scope.noData = true;
                                     return;
                                 }
                                 var option = ChartService.getOption(scope.chart, newValue, style_extend, scope.tooltipFormatter, config);
                                 chartInstance.hideLoading();
+                                scope.$$loadingStatus = false;
                                 var updateNotMerge = false;
                                 if(scope.updateNotMerge === 'true'){
                                     updateNotMerge = true;
@@ -644,6 +656,7 @@ angular.module("ui.website.chart",[])
                                 scope.noData = true;
                                 chartInstance = echartsInit();
                                 chartInstance.hideLoading();
+                                scope.$$loadingStatus = false;
                             }
                         }
                     }
