@@ -626,13 +626,13 @@ angular.module("ui.website.chart",[])
                                 },0);
                             }
                         }
-                    })
-                    var chartInstance = echartsInit();
+                    });
 
-                    var running = false;
+                    var chartInstance = echartsInit();
 
                     function paint(newValue) {
                         if(newValue !== undefined){
+                            console.log(JSON.stringify(newValue));
                             try{
                                 if(newValue.status === 'error'){
                                     chartInstance.hideLoading();
@@ -661,39 +661,55 @@ angular.module("ui.website.chart",[])
                         }
                     }
 
+                    /**
+                     * 数据变化的三种情况:
+                     * 1. 引用变化 直接赋予了一个新值
+                     * 2. 值变化 改变了原数据
+                     * 3. 即引用变化, 又值变化 所以两种情况必须都要监听
+                     */
                     scope.$watch('chartData', function(newValue, oldValue){
                         if (newValue !== undefined){
                             // console.log("值比较");
-                            // console.log("旧值:" + oldValue + ",新值" + newValue)
-                            if (!running){
-                                running = true;
-                                paint(newValue);
-                                $timeout(function () {
-                                    running = false;
-                                }, 0);
-                            } else {
-                                // console.log("值比较, 正在运行")
-                            }
+                            // var oldValueStr;
+                            // if (oldValue != undefined){
+                            //     oldValueStr = JSON.stringify(oldValue);
+                            // }
+                            // console.log("旧值:" + oldValueStr + ",新值" + JSON.stringify(newValue));
+                            /**
+                             * 如果直接执行paint方法 echarts会报错
+                             * 所以将两个方法加入队列
+                             */
+                            $timeout(function () {
+                               paint(newValue);
+                            }, 0)
                         }
 
                     }, true);
 
+                    /**
+                     * 数据变化的三种情况:
+                     * 1. 引用变化 直接赋予了一个新值
+                     * 2. 值变化 改变了原数据
+                     * 3. 即引用变化, 又值变化 所以两种情况必须都要监听
+                     */
                     /**
                      * 解决 如果图表重新加载 还是加载不到数据 则无法触发上边的$watch函数 原因(值比较 一直是false 则无法触发)
                      */
                     scope.$watch('chartData', function(newValue, oldValue){
                         if (newValue !== undefined){
                             // console.log("引用比较")
-                            // console.log("旧值:" + oldValue + ",新值" + newValue)
-                            if (!running){
-                                running = true;
+                            // var oldValueStr;
+                            // if (oldValue != undefined){
+                            //     oldValueStr = JSON.stringify(oldValue);
+                            // }
+                            // console.log("旧值:" + oldValueStr + ",新值" + JSON.stringify(newValue));
+                            /**
+                             * 如果直接执行paint方法 echarts会报错
+                             * 所以将两个方法加入队列
+                             */
+                            $timeout(function () {
                                 paint(newValue);
-                                $timeout(function () {
-                                    running = false;
-                                }, 0);
-                            } else {
-                                // console.log("引用比较, 正在运行")
-                            }
+                            }, 0)
                         }
                     });
                 }
